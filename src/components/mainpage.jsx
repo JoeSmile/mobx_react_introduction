@@ -18,23 +18,28 @@ export default class MainPage extends React.Component {
     }
 
     render() {
+        const lenght = this.props.store.getLength
         return (
             <div>
                 <div>
                     Todo List
                 </div>
-                <input
-                    type = 'text'
-                    value={this.newTitle}
-                    onChange={this.handleInputTitle}
-                />
-                <div onClick={this.handleAddItem}>Add One Todo Item</div>
+                <div>
+                    <input type = 'text' value={this.newTitle} onChange={this.handleInputTitle}/>
+                    <span onClick={this.handleAddItem}>+</span>
+                </div>
+                <div>
+                    <span>There are </span>
+                    <span>{lenght}</span>
+                    <span>lists wait to be solved</span>
+                    <span onClick={this.props.store.increment}>+</span>
+                </div>
                 <ul>
                     {
                         this.props.store.todos.map(item => {
                             return (<li key={item.title}>
                                         {item.title}
-                                    <div onClick={() => {this.props.store.deleteTodo(item.title)}}>X</div>
+                                    <span onClick={() => {this.props.store.deleteTodo(item.title)}}>      X</span>
                             </li>)
                         })
                     }
