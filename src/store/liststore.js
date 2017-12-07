@@ -1,11 +1,16 @@
 import { observable, computed, action, autorun } from 'mobx'
 import TodoItem from './item'
+
 export default class TodoListModel {
     @observable todos = []
-    @observable price = 0
+    @observable price = 10
     @observable amount = 1
     @observable listLenght = 0
     
+    constructor(rootStore) {
+        this.rootStore = rootStore
+    }
+
     @action
     init() {
         this.todos = [{
@@ -47,7 +52,7 @@ export default class TodoListModel {
     }
 
     @computed get total() {
-        return this.price * this.amount;
+        return this.price * this.listLenght;
     }
 
     @computed get getLength() {
@@ -59,4 +64,9 @@ export default class TodoListModel {
     }
 
     printLog = autorun(() => console.log('autorun:',this.listLenght))
+    
+    clear() {
+        this.printLog()
+    }
+    
 }
