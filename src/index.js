@@ -7,8 +7,8 @@ import MainPage from './components/mainpage'
 import ASync from './components/async'
 
 //store
-import UIStore from './store/liststore'
-import AsyncStore from './store/async'
+import UIStore from './store/UIStore'
+import AsyncStore from './js/async'
 import RootStore from './store/rootStore'
 
 // 不联合的写法

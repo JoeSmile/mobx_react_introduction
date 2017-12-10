@@ -1,5 +1,5 @@
-import UIStore from './liststore'
-import AsyncStore from './async'
+import UIStore from './UIStore'
+import AsyncStore from '../js/async'
 
 export default class RootStore {
     constructor() {

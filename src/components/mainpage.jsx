@@ -1,10 +1,17 @@
 import React, {Component} from 'react'
-import {observable, action} from 'mobx'
-import { observer,Provider, inject } from 'mobx-react'
+import {observable, action, autorun, extendObservable, intercept} from 'mobx'
+import { observer, Provider, inject } from 'mobx-react'
+
+import Clock from '../js/clock'
+
 @inject('store') @observer
 export default class MainPage extends React.Component {
     @observable newTitle = ''
-  
+    @observable time = ''
+
+    autoTransformFunc
+    transformedData
+
     @action
     handleInputTitle = (e) => {
         this.newTitle = e.target.value
@@ -16,8 +23,25 @@ export default class MainPage extends React.Component {
         this.newTitle = ''
     }
 
+    componentDidMount() {
+        this.clock = new Clock()
+        const disposer = autorun(() => this.time = this.clock.getTime().getSeconds())
+
+        //给UIstore附加一个值
+        extendObservable(this.props.store,{
+            extendObservableItem: 'xxxxxx'
+        })
+
+        // 拦截器修改obsevable的值
+        // intercept(this.props.store, 'listLenght', change => {
+        //     console.log('intercept:',change.newValue)
+        //     change.newValue = 99999
+        //     return change
+        // })
+    }
+
     render() {
-        const lenght = this.props.store.getLength
+        const { getLength, stopAutoRun }= this.props.store
         return (
             <div>
                 <div>
@@ -28,9 +52,9 @@ export default class MainPage extends React.Component {
                     <span onClick={this.handleAddItem}> ADD </span>
                 </div>
                 <div>
-                    <span>There are </span>
-                    <span>{lenght}</span>
-                    <span>lists wait to be solved</span>
+                    <span>There are  </span>
+                    <span>{getLength}</span>
+                    <span> lists wait to be solved</span>
                     <span onClick={this.props.store.increment} style={{border: '1px solid black'}}> autorun test </span>
                 </div>
                 <ul>
@@ -43,6 +67,9 @@ export default class MainPage extends React.Component {
                         })
                     }
                 </ul>
+                <div onClick={() => stopAutoRun()}>stop auto run</div>
+                <div>{'clock is running :' + this.time}</div>
+
             </div>
         )
     }
